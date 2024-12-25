@@ -1,0 +1,12 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# React build
+/build
+/dist
+
+# OS-specific files
+.DS_Store
+Thumbs.db
