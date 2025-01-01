@@ -1,45 +1,45 @@
-import express from "express"
-import wifiRouter from "./routes/wifi_routes.js"
-import bodyParser from "body-parser"
-import mongoose from "mongoose" 
-import fs from 'fs'
+import express from "express";
+import wifiRouter from "./routes/wifi_routes.js";
+import bodyParser from "body-parser";
+import mongoose from "mongoose";
+import { consumeWifiPass } from "./controllers/wifi_controllers.js";
 
+const dbUrl = "mongodb://mongo:27017/";
 
-const dbUrl  = "mongodb://mongo:27017/"
-
-mongoose.connect(dbUrl,{
+mongoose
+  .connect(dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-}).then(()=> console.log("Database Connected"))
-  .catch((err)=> console.log("Database Error ",err))
+  })
+  .then(() => console.log("Database Connected"))
+  .catch((err) => console.log("Database Error ", err));
 
+const app = express();
 
-const app = express()
+app.use(bodyParser.json());
 
-app.use(bodyParser.json())
-
+setTimeout(() => {
+  consumeWifiPass();
+}, 10000);
 
 // Custom logging middleware
 const logRequest = (req, res, next) => {
-    console.log("Request Headers",req.headers)
-    console.log("Request Body",req.body)
-    next();
+  console.log("Request Headers", req.headers);
+  console.log("Request Body", req.body);
+  next();
 };
-  
 
+app.use(logRequest);
 
+app.use("/wifi", wifiRouter);
 
-app.use(logRequest)
+app.get("/", (req, res) => {
+  res.json({
+    msg: "Server Running",
+  });
+});
 
-app.use("/wifi",wifiRouter)
-
-app.get("/",(req,res)=>{
-    res.json({
-        msg : "Server Running"
-    })
-})
-
-const PORT = process.env.PORT || 8005
-app.listen(PORT,()=>{
-    console.log("Server Started")
-})
+const PORT = process.env.PORT || 8005;
+app.listen(PORT, () => {
+  console.log("Server Started");
+});

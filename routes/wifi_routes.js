@@ -1,6 +1,7 @@
 import express from "express"
 import { getAllData,batchSaveWifiPasswords,deleteAll } from "../services/wifi_service.js"
 import {checkErrorsInWifiPassBody} from "../utils/validator.js"
+import {publishWifiPass} from "../controllers/wifi_controllers.js"
 
 const router = express.Router()
 
@@ -24,19 +25,13 @@ router.post("/",async (req,res)=>{
             lng : item.lng
         }  
     })
-    const response = await batchSaveWifiPasswords(filteredItems)
-    if(response.ok ==1){
+    console.log("publishWifiPass Called")
+    await publishWifiPass(filteredItems,()=>{
         res.json({
             success: true,
             msg : "Batch Saved"
         })
-    }else {
-        res.json({
-            success: false,
-            msg : `Something Went Wrong : ${response}`
-        })
-    }
-    
+    })
 })
 
 router.delete("/", async (req,res) => {

@@ -7,7 +7,8 @@ const wifiModelSchema = new mongoose.Schema({
     },
     name : {
         type : String,
-        required : true
+        required : true,
+        index: true
     },
     password : {
         type: String,
@@ -27,5 +28,5 @@ const wifiModelSchema = new mongoose.Schema({
     }
 } , {timestamps : true})
 const WifiModel = mongoose.model("WifiPassword",wifiModelSchema)
-
+// WifiModel.createIndexes()
 export default WifiModel
