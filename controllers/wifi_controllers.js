@@ -19,8 +19,8 @@ export async function publishWifiPass(items, cb) {
   }, 500);
 }
 const buffer = [];
-const batchSize = 100;
-const saveDataInterval = 20000;
+const batchSize = 1;
+const saveDataInterval = 2000;
 
 setInterval(async () => {
   saveBufferData(false);
@@ -52,6 +52,7 @@ async function saveBufferData(checkBatchSize) {
             saveFailedBufferData(dataToSave)
         }
     } catch(error){
+        console.log("Error On Saving",error)
         saveFailedBufferData(dataToSave)
     }
   }
